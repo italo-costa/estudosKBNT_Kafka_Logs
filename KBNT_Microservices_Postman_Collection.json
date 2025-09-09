@@ -1,0 +1,327 @@
+{
+  "info": {
+    "name": "KBNT Microservices API Collection",
+    "description": "Complete API collection for KBNT Microservices Architecture via API Gateway",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// Set base URL for API Gateway",
+          "pm.environment.set('baseUrl', 'http://localhost:8080');",
+          "pm.environment.set('gatewayHealthUrl', 'http://localhost:9080');"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "gatewayHealthUrl", 
+      "value": "http://localhost:9080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🌐 API Gateway",
+      "item": [
+        {
+          "name": "Gateway Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayHealthUrl}}/actuator/health",
+              "host": ["{{gatewayHealthUrl}}"],
+              "path": ["actuator", "health"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Routes",
+          "request": {
+            "method": "GET", 
+            "header": [],
+            "url": {
+              "raw": "{{gatewayHealthUrl}}/actuator/gateway/routes",
+              "host": ["{{gatewayHealthUrl}}"],
+              "path": ["actuator", "gateway", "routes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gatewayHealthUrl}}/actuator/metrics",
+              "host": ["{{gatewayHealthUrl}}"],
+              "path": ["actuator", "metrics"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🏪 Virtual Stock Service",
+      "item": [
+        {
+          "name": "Get All Stocks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/virtual-stock/stocks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "virtual-stock", "stocks"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PROD-001\",\n  \"productName\": \"Test Product via Gateway\",\n  \"quantity\": 100,\n  \"price\": 29.99,\n  \"category\": \"ELECTRONICS\",\n  \"description\": \"Test product created through API Gateway\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/virtual-stock/stocks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "virtual-stock", "stocks"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stock by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/virtual-stock/stocks/{{stockId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "virtual-stock", "stocks", "{{stockId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Stock",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PROD-001\",\n  \"productName\": \"Updated Test Product\",\n  \"quantity\": 150,\n  \"price\": 39.99,\n  \"category\": \"ELECTRONICS\",\n  \"description\": \"Updated product via API Gateway\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/virtual-stock/stocks/{{stockId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "virtual-stock", "stocks", "{{stockId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Stock",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/virtual-stock/stocks/{{stockId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "virtual-stock", "stocks", "{{stockId}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📝 Log Producer Service", 
+      "item": [
+        {
+          "name": "Produce Log Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"level\": \"INFO\",\n  \"message\": \"Test log message via API Gateway\",\n  \"service\": \"virtual-stock-service\",\n  \"timestamp\": \"{{$isoTimestamp}}\",\n  \"metadata\": {\n    \"userId\": \"test-user\",\n    \"operation\": \"stock-creation\",\n    \"correlationId\": \"{{$randomUUID}}\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/logs/produce",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "logs", "produce"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Log Producer Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/logs/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "logs", "status"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔍 Health Checks",
+      "item": [
+        {
+          "name": "Virtual Stock Health (via Gateway)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health/virtual-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health", "virtual-stock"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log Producer Health (via Gateway)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health/log-producer",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health", "log-producer"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🧪 Integration Tests",
+      "item": [
+        {
+          "name": "End-to-End Test Flow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"E2E-{{$randomInt}}\",\n  \"productName\": \"End-to-End Test Product\",\n  \"quantity\": 50,\n  \"price\": 19.99,\n  \"category\": \"TESTING\",\n  \"description\": \"Product for end-to-end testing\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/virtual-stock/stocks",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "virtual-stock", "stocks"]
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "// Test: Verify successful stock creation",
+                    "pm.test('Stock created successfully', function () {",
+                    "    pm.response.to.have.status(201);",
+                    "    const response = pm.response.json();",
+                    "    pm.expect(response.success).to.be.true;",
+                    "    pm.expect(response.data).to.have.property('id');",
+                    "    ",
+                    "    // Store stock ID for subsequent tests",
+                    "    pm.environment.set('createdStockId', response.data.id);",
+                    "});",
+                    "",
+                    "// Test: Verify response structure",
+                    "pm.test('Response has correct structure', function () {",
+                    "    const response = pm.response.json();",
+                    "    pm.expect(response).to.have.property('success');",
+                    "    pm.expect(response).to.have.property('data');",
+                    "    pm.expect(response).to.have.property('message');",
+                    "    pm.expect(response).to.have.property('timestamp');",
+                    "});"
+                  ]
+                }
+              }
+            ]
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

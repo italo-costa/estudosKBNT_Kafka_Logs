@@ -50,8 +50,6 @@ spring:
       # Performance Settings
       auto-commit: false
       transaction-isolation: TRANSACTION_READ_COMMITTED
-      # Pool Name for monitoring
-      pool-name: VirtualStockHikariPool
       # Additional Performance Settings
       allow-pool-suspension: true
       catalog: kbnt_db

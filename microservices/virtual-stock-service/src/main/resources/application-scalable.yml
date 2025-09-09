@@ -60,7 +60,6 @@ spring:
       idle-timeout: 300000
       max-lifetime: 1800000
       leak-detection-threshold: 60000
-      pool-name: VirtualStockHikariCP
 
   # Kafka Producer Configuration (High Throughput)
   kafka:
